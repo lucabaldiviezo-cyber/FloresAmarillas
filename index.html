@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Día de las Flores Amarillas - Con Música & Modo Claro/Oscuro</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Plus+Jakarta+Sans:wght@300;400;600&display=swap');
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Variables de Color para Modo Oscuro y Modo Claro */
+    :root {
+      --bg-color: #050608;
+      --bg-gradient-1: rgba(255, 183, 3, 0.12);
+      --bg-gradient-2: rgba(212, 163, 89, 0.08);
+      --container-bg: rgba(18, 20, 29, 0.55);
+      --container-border: rgba(255, 215, 0, 0.25);
+      --card-bg: rgba(15, 17, 26, 0.85);
+      --card-border: rgba(255, 215, 0, 0.3);
+      --text-main: #d1d5db;
+      --text-title-grad-start: #fff;
+      --theme-btn-bg: rgba(255, 255, 255, 0.1);
+      --theme-btn-border: rgba(255, 215, 0, 0.4);
+      --theme-btn-text: #ffd700;
+      --ground-line: rgba(255, 215, 0, 0.25);
+    }
+
+    [data-theme="light"] {
+      --bg-color: #f7f5ed;
+      --bg-gradient-1: rgba(255, 200, 0, 0.25);
+      --bg-gradient-2: rgba(255, 180, 50, 0.15);
+      --container-bg: rgba(255, 255, 255, 0.65);
+      --container-border: rgba(212, 160, 23, 0.4);
+      --card-bg: rgba(255, 255, 255, 0.88);
+      --card-border: rgba(212, 160, 23, 0.45);
+      --text-main: #333333;
+      --text-title-grad-start: #2c1d02;
+      --theme-btn-bg: rgba(0, 0, 0, 0.05);
+      --theme-btn-border: rgba(212, 160, 23, 0.5);
+      --theme-btn-text: #8a5a00;
+      --ground-line: rgba(212, 160, 23, 0.4);
+    }
+
+    body {
+      background: var(--bg-color);
+      background-image: 
+        radial-gradient(at 20% 20%, var(--bg-gradient-1) 0px, transparent 50%),
+        radial-gradient(at 80% 80%, var(--bg-gradient-2) 0px, transparent 50%);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+      color: var(--text-main);
+      transition: background 0.5s ease, color 0.5s ease;
+    }
+
+    #app-container {
+      position: relative;
+      width: 95vw;
+      max-width: 1200px;
+      height: 90vh;
+      max-height: 750px;
+      background: var(--container-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--container-border);
+      border-radius: 24px;
+      box-shadow: 0 30px 100px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+      transition: background 0.5s ease, border-color 0.5s ease;
+    }
+
+    /* Botón de Cambio de Tema */
+    #theme-toggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 30;
+      padding: 10px 18px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--theme-btn-text);
+      background: var(--theme-btn-bg);
+      border: 1px solid var(--theme-btn-border);
+      border-radius: 30px;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    #theme-toggle:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+    }
+
+    /* Botón Inicial */
+    #start-btn {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 16px 40px;
+      font-family: 'Cinzel', serif;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 3px;
+      color: #000;
+      background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      z-index: 20;
+      box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    #start-btn:hover {
+      transform: translate(-50%, -50%) scale(1.08);
+      box-shadow: 0 0 50px rgba(255, 215, 0, 0.8);
+    }
+
+    /* Carta Lateral */
+    #card-panel {
+      position: absolute;
+      left: 4%;
+      top: 8%;
+      width: 38%;
+      max-width: 420px;
+      max-height: 84%;
+      z-index: 10;
+      padding: 28px;
+      background: var(--card-bg);
+      backdrop-filter: blur(15px);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1s ease, transform 1s ease, background 0.5s ease, border-color 0.5s ease;
+      overflow-y: auto;
+    }
+
+    #card-panel.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    #card-panel h1 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(16px, 1.8vw, 20px);
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--text-title-grad-start) 0%, #d4a017 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 20px;
+      line-height: 1.3;
+      letter-spacing: 1.5px;
+    }
+
+    #card-panel p {
+      font-size: clamp(12px, 1.2vw, 14px);
+      line-height: 1.8;
+      color: var(--text-main);
+      font-weight: 400;
+      margin-bottom: 12px;
+    }
+
+    .signature {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(13px, 1.2vw, 15px) !important;
+      color: #d4a017 !important;
+      margin-top: 20px;
+      padding-top: 12px;
+      border-top: 1px solid var(--card-border);
+      font-weight: 600;
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    #bg-canvas { z-index: 1; }
+    #stage { z-index: 2; }
+  </style>
+</head>
+<body data-theme="dark">
+
+<div id="app-container">
+  <button id="theme-toggle" onclick="toggleTheme()">🌙 Modo Oscuro</button>
+  <button id="start-btn" onclick="startExperience()">✦ TOCAR PARA DESCUBRIR ✦</button>
+
+  <div id="card-panel">
+    <h1>🌻 DÍA DE LAS FLORES AMARILLAS 🌻</h1>
+    <div id="typed-content"></div>
+  </div>
+
+  <canvas id="bg-canvas"></canvas>
+  <canvas id="stage"></canvas>
+</div>
+
+<script>
+const container = document.getElementById('app-container');
+const bgCanvas = document.getElementById('bg-canvas');
+const bgCtx = bgCanvas.getContext('2d');
+const canvas = document.getElementById('stage');
+const ctx = canvas.getContext('2d');
+
+const startBtn = document.getElementById('start-btn');
+const cardPanel = document.getElementById('card-panel');
+const typedContent = document.getElementById('typed-content');
+const themeToggleBtn = document.getElementById('theme-toggle');
+
+let currentTheme = 'dark';
+
+function toggleTheme() {
+  if (currentTheme === 'dark') {
+    currentTheme = 'light';
+    document.body.setAttribute('data-theme', 'light');
+    themeToggleBtn.innerHTML = '☀️ Modo Claro';
+  } else {
+    currentTheme = 'dark';
+    document.body.setAttribute('data-theme', 'dark');
+    themeToggleBtn.innerHTML = '🌙 Modo Oscuro';
+  }
+}
+
+let W, H;
+function resize() {
+  W = bgCanvas.width = canvas.width = container.clientWidth;
+  H = bgCanvas.height = canvas.height = container.clientHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+let mouse = { x: -1000, y: -1000 };
+canvas.addEventListener('mousemove', (e) => {
+  const rect = canvas.getBoundingClientRect();
+  mouse.x = e.clientX - rect.left;
+  mouse.y = e.clientY - rect.top;
+});
+canvas.addEventListener('mouseleave', () => {
+  mouse.x = -1000;
+  mouse.y = -1000;
+});
+
+// --- SISTEMA DE MÚSICA DE FONDO (Web Audio API) ---
+let audioCtx;
+function startBackgroundMusic() {
+  try {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    
+    // Melodía armónica relajante en A mayor / F# menor
+    const notes = [
+      { f: 440.00, d: 0.5 }, { f: 554.37, d: 0.5 }, { f: 659.25, d: 0.5 }, { f: 880.00, d: 1.0 },
+      { f: 659.25, d: 0.5 }, { f: 554.37, d: 0.5 }, { f: 493.88, d: 0.5 }, { f: 739.99, d: 1.0 },
+      { f: 554.37, d: 0.5 }, { f: 659.25, d: 0.5 }, { f: 880.00, d: 0.5 }, { f: 987.77, d: 1.2 },
+      { f: 880.00, d: 0.5 }, { f: 739.99, d: 0.5 }, { f: 659.25, d: 1.5 }
+    ];
+
+    let noteIndex = 0;
+
+    function playNextNote() {
+      if (!audioCtx) return;
+      let note = notes[noteIndex];
+
+      let osc = audioCtx.createOscillator();
+      let gain = audioCtx.createGain();
+
+      osc.type = 'sine'; // Tono suave de celesta/caja de música
+      osc.frequency.setValueAtTime(note.f, audioCtx.currentTime);
+
+      // Ataque suave y caída armónica
+      gain.gain.setValueAtTime(0.001, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.08, audioCtx.currentTime + 0.1);
+      gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + note.d + 0.4);
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      osc.start();
+      osc.stop(audioCtx.currentTime + note.d + 0.5);
+
+      noteIndex = (noteIndex + 1) % notes.length;
+      setTimeout(playNextNote, note.d * 900);
+    }
+
+    playNextNote();
+  } catch (e) {
+    console.log("Audio API no soportado o bloqueado");
+  }
+}
+
+// Buffer de flor pre-renderizada
+const flowerBuffer = document.createElement('canvas');
+flowerBuffer.width = 50;
+flowerBuffer.height = 50;
+const fCtx = flowerBuffer.getContext('2d');
+
+function preRenderFlower() {
+  const r = 22;
+  fCtx.translate(25, 25);
+  const petals = 16;
+
+  for (let i = 0; i < petals; i++) {
+    fCtx.rotate((Math.PI * 2) / petals);
+    let grad = fCtx.createLinearGradient(0, 0, 0, r);
+    grad.addColorStop(0, '#ff8c00');
+    grad.addColorStop(0.5, '#ffd700');
+    grad.addColorStop(1, '#fffae0');
+
+    fCtx.fillStyle = grad;
+    fCtx.beginPath();
+    fCtx.ellipse(0, r * 0.55, r * 0.22, r * 0.65, 0, 0, Math.PI * 2);
+    fCtx.fill();
+  }
+
+  let centerGrad = fCtx.createRadialGradient(0, 0, 0, 0, 0, r * 0.42);
+  centerGrad.addColorStop(0, '#120500');
+  centerGrad.addColorStop(0.7, '#3d1a00');
+  centerGrad.addColorStop(1, '#5e2b00');
+
+  fCtx.beginPath();
+  fCtx.arc(0, 0, r * 0.42, 0, Math.PI * 2);
+  fCtx.fillStyle = centerGrad;
+  fCtx.fill();
+}
+preRenderFlower();
+
+const poemText = [
+  "Cada girasol en este árbol dorado representa un latido y un motivo por el cual iluminas mi vida.",
+  "Como el sol guía a los campos en primavera, tu presencia llena de luz y calor todo a tu alrededor.",
+  "Que estas flores eternas te recuerden siempre lo infinitamente especial y única que eres para mí."
+];
+
+const TOTAL_ANIMATION_TIME = 12500; 
+
+let isStarted = false;
+let flowers = [];
+let fallingFlowers = [];
+
+// Avión y estela en rastro
+let plane = {
+  x: 0, y: 0, vx: 0, vy: 0, angle: 0, active: false, distanceTraveled: 0, maxDistance: 0
+};
+let smokeTrail = [];
+let textParticles = [];
+const messageText = "♥ TE AMO ♥";
+
+function spawnPlane() {
+  const sides = ['left', 'right', 'top', 'bottom', 'diag-tl', 'diag-tr', 'diag-bl', 'diag-br'];
+  const type = sides[Math.floor(Math.random() * sides.length)];
+  const speed = 2.4 + Math.random() * 0.6;
+
+  let startX, startY, endX, endY;
+
+  switch (type) {
+    case 'left':
+      startX = -100; startY = 80 + Math.random() * (H * 0.35);
+      endX = W + 100; endY = startY + (Math.random() - 0.5) * 80;
+      break;
+    case 'right':
+      startX = W + 100; startY = 80 + Math.random() * (H * 0.35);
+      endX = -100; endY = startY + (Math.random() - 0.5) * 80;
+      break;
+    case 'top':
+      startX = W * 0.3 + Math.random() * (W * 0.4); startY = -100;
+      endX = startX + (Math.random() - 0.5) * 200; endY = H + 100;
+      break;
+    case 'bottom':
+      startX = W * 0.3 + Math.random() * (W * 0.4); startY = H + 100;
+      endX = startX + (Math.random() - 0.5) * 200; endY = -100;
+      break;
+    case 'diag-tl':
+      startX = -100; startY = -100; endX = W + 100; endY = H * 0.6; break;
+    case 'diag-tr':
+      startX = W + 100; startY = -100; endX = -100; endY = H * 0.6; break;
+    case 'diag-bl':
+      startX = -100; startY = H + 100; endX = W + 100; endY = -100; break;
+    case 'diag-br':
+      startX = W + 100; startY = H + 100; endX = -100; endY = -100; break;
+  }
+
+  const dx = endX - startX;
+  const dy = endY - startY;
+  const dist = Math.sqrt(dx * dx + dy * dy);
+
+  plane.x = startX;
+  plane.y = startY;
+  plane.vx = (dx / dist) * speed;
+  plane.vy = (dy / dist) * speed;
+  plane.angle = Math.atan2(dy, dx);
+  plane.active = true;
+  plane.distanceTraveled = 0;
+  plane.maxDistance = dist;
+}
+
+function drawSkyAndPlane() {
+  bgCtx.clearRect(0, 0, W, H);
+
+  if (isStarted) {
+    if (!plane.active) {
+      if (Math.random() < 0.008) spawnPlane();
+    } else {
+      plane.x += plane.vx;
+      plane.y += plane.vy;
+      plane.distanceTraveled += Math.sqrt(plane.vx * plane.vx + plane.vy * plane.vy);
+
+      if (plane.distanceTraveled >= plane.maxDistance) plane.active = false;
+
+      if (Math.random() < 0.7) {
+        smokeTrail.push({
+          x: plane.x - Math.cos(plane.angle) * 20,
+          y: plane.y - Math.sin(plane.angle) * 20,
+          alpha: 1, size: Math.random() * 3 + 2
+        });
+      }
+
+      let charInterval = plane.maxDistance / (messageText.length + 2);
+      let charIndex = Math.floor(plane.distanceTraveled / charInterval) - 1;
+
+      if (charIndex >= 0 && charIndex < messageText.length) {
+        if (!textParticles.some(p => p.index === charIndex && p.runId === plane.maxDistance)) {
+          textParticles.push({
+            char: messageText[charIndex],
+            x: plane.x - Math.cos(plane.angle) * 25,
+            y: plane.y - Math.sin(plane.angle) * 25,
+            angle: plane.angle,
+            alpha: 1, index: charIndex, runId: plane.maxDistance
+          });
+        }
+      }
+    }
+  }
+
+  // Render Humo
+  bgCtx.save();
+  smokeTrail.forEach((p, idx) => {
+    p.alpha -= 0.0025;
+    if (p.alpha > 0) {
+      bgCtx.fillStyle = currentTheme === 'dark' 
+        ? `rgba(255, 230, 150, ${p.alpha})` 
+        : `rgba(212, 160, 23, ${p.alpha * 0.8})`;
+      bgCtx.shadowBlur = 8;
+      bgCtx.shadowColor = '#ffd700';
+      bgCtx.beginPath();
+      bgCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      bgCtx.fill();
+    } else {
+      smokeTrail.splice(idx, 1);
+    }
+  });
+  bgCtx.restore();
+
+  // Render Letras
+  bgCtx.save();
+  textParticles.forEach((tp, idx) => {
+    tp.alpha -= 0.0015;
+    if (tp.alpha > 0) {
+      bgCtx.save();
+      bgCtx.translate(tp.x, tp.y);
+      bgCtx.rotate(tp.angle > Math.PI / 2 || tp.angle < -Math.PI / 2 ? tp.angle + Math.PI : tp.angle);
+      bgCtx.font = "italic bold clamp(16px, 2vw, 24px) 'Cinzel', serif";
+      bgCtx.fillStyle = currentTheme === 'dark' 
+        ? `rgba(255, 215, 0, ${tp.alpha})`
+        : `rgba(180, 120, 0, ${tp.alpha})`;
+      bgCtx.shadowBlur = 12;
+      bgCtx.shadowColor = "#ffd700";
+      bgCtx.textAlign = "center";
+      bgCtx.textBaseline = "middle";
+      bgCtx.fillText(tp.char, 0, 0);
+      bgCtx.restore();
+    } else {
+      textParticles.splice(idx, 1);
+    }
+  });
+  bgCtx.restore();
+
+  // Render Avioneta
+  if (isStarted && plane.active) {
+    bgCtx.save();
+    bgCtx.translate(plane.x, plane.y);
+    bgCtx.rotate(plane.angle);
+    bgCtx.fillStyle = currentTheme === 'dark' ? "#fff" : "#333";
+    bgCtx.beginPath();
+    bgCtx.moveTo(0, 0);
+    bgCtx.lineTo(-20, -6);
+    bgCtx.lineTo(-16, 0);
+    bgCtx.lineTo(-20, 6);
+    bgCtx.closePath();
+    bgCtx.fill();
+    bgCtx.fillRect(-10, -12, 5, 24);
+    bgCtx.restore();
+  }
+
+  requestAnimationFrame(drawSkyAndPlane);
+}
+drawSkyAndPlane();
+
+function startExperience() {
+  if (isStarted) return;
+  isStarted = true;
+
+  // Iniciar la música al interactuar con el botón
+  startBackgroundMusic();
+
+  startBtn.style.opacity = '0';
+  startBtn.style.transform = 'translate(-50%, -50%) scale(0.8)';
+  setTimeout(() => startBtn.style.display = 'none', 500);
+
+  spawnPlane();
+  cardPanel.classList.add('active');
+  typeWriter(0, 0);
+
+  initHeartPoints();
+  animateAllTogether();
+}
+
+function initHeartPoints() {
+  const centerX = W * 0.72;
+  const centerY = H * 0.35;
+  const scale = Math.min(W, H) * 0.021;
+
+  for (let r = 0.15; r <= 1.0; r += 0.075) {
+    let numPoints = Math.floor(45 * r);
+    for (let i = 0; i < numPoints; i++) {
+      let t = (i / numPoints) * Math.PI * 2;
+
+      let x = 16 * Math.pow(Math.sin(t), 3);
+      let y = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
+
+      flowers.push({
+        x: centerX + (x * scale * r),
+        y: centerY + (y * scale * r),
+        scale: Math.random() * 0.25 + 0.5,
+        delay: 2000 + Math.random() * (TOTAL_ANIMATION_TIME - 3000),
+        currentScale: 0,
+        activeInTree: true
+      });
+    }
+  }
+}
+
+function animateAllTogether() {
+  let startTime = null;
+
+  function render(timestamp) {
+    if (!startTime) startTime = timestamp;
+    let elapsed = timestamp - startTime;
+
+    ctx.clearRect(0, 0, W, H);
+
+    const treeX = W * 0.72;
+    const treeY = H * 0.85;
+    const treeHeight = H * 0.28;
+
+    // Suelo
+    ctx.beginPath();
+    ctx.moveTo(W * 0.08, treeY);
+    ctx.lineTo(W * 0.92, treeY);
+    ctx.strokeStyle = currentTheme === 'dark' ? 'rgba(255, 215, 0, 0.25)' : 'rgba(212, 160, 23, 0.4)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Tronco
+    let trunkProgress = Math.min(1, elapsed / 3000);
+    let curH = treeHeight * trunkProgress;
+    let endY = treeY - curH;
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(treeX, treeY);
+    ctx.quadraticCurveTo(treeX - 15, treeY - curH / 2, treeX, endY);
+    ctx.strokeStyle = '#1b5e3a';
+    ctx.lineWidth = 12;
+    ctx.lineCap = 'round';
+    ctx.stroke();
+
+    // Ramas
+    if (trunkProgress > 0.6) {
+      let bProgress = (trunkProgress - 0.6) / 0.4;
+      [-0.45, 0.45, -0.7, 0.7, 0].forEach(ang => {
+        let len = 75 * bProgress;
+        ctx.beginPath();
+        ctx.moveTo(treeX, endY);
+        ctx.lineTo(treeX + Math.cos(-Math.PI / 2 + ang) * len, endY + Math.sin(-Math.PI / 2 + ang) * len);
+        ctx.strokeStyle = '#1b5e3a';
+        ctx.lineWidth = 5;
+        ctx.stroke();
+      });
+    }
+    ctx.restore();
+
+    // Flores del árbol brotando
+    flowers.forEach(f => {
+      if (elapsed > f.delay) {
+        let p = Math.min(1, (elapsed - f.delay) / 800);
+        f.currentScale = f.scale * p;
+      }
+
+      if (f.currentScale > 0) {
+        ctx.save();
+        ctx.translate(f.x, f.y);
+        ctx.scale(f.currentScale, f.currentScale);
+        ctx.drawImage(flowerBuffer, -25, -25);
+        ctx.restore();
+      }
+    });
+
+    if (elapsed < TOTAL_ANIMATION_TIME + 500) {
+      requestAnimationFrame(render);
+    } else {
+      triggerTreePulseAnimation();
+    }
+  }
+
+  requestAnimationFrame(render);
+}
+
+function triggerTreePulseAnimation() {
+  let startPulseTime = null;
+  const pulseDuration = 2000;
+
+  function pulseLoop(timestamp) {
+    if (!startPulseTime) startPulseTime = timestamp;
+    let elapsed = timestamp - startPulseTime;
+    let p = elapsed / pulseDuration;
+
+    ctx.clearRect(0, 0, W, H);
+
+    const treeX = W * 0.72;
+    const treeY = H * 0.85;
+    const treeHeight = H * 0.28;
+
+    let pulseScale = 1 + Math.sin(p * Math.PI * 3) * 0.04;
+
+    ctx.beginPath();
+    ctx.moveTo(W * 0.08, treeY);
+    ctx.lineTo(W * 0.92, treeY);
+    ctx.strokeStyle = currentTheme === 'dark' ? 'rgba(255, 215, 0, 0.3)' : 'rgba(212, 160, 23, 0.4)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(treeX, treeY);
+    ctx.quadraticCurveTo(treeX - 15, treeY - treeHeight / 2, treeX, treeY - treeHeight);
+    ctx.strokeStyle = '#1b5e3a';
+    ctx.lineWidth = 12;
+    ctx.stroke();
+
+    [-0.45, 0.45, -0.7, 0.7, 0].forEach(ang => {
+      ctx.beginPath();
+      ctx.moveTo(treeX, treeY - treeHeight);
+      ctx.lineTo(treeX + Math.cos(-Math.PI / 2 + ang) * 75, (treeY - treeHeight) + Math.sin(-Math.PI / 2 + ang) * 75);
+      ctx.strokeStyle = '#1b5e3a';
+      ctx.lineWidth = 5;
+      ctx.stroke();
+    });
+    ctx.restore();
+
+    const centerX = W * 0.72;
+    const centerY = H * 0.35;
+
+    flowers.forEach(f => {
+      ctx.save();
+      let dx = f.x - centerX;
+      let dy = f.y - centerY;
+      let px = centerX + dx * pulseScale;
+      let py = centerY + dy * pulseScale;
+
+      ctx.translate(px, py);
+      ctx.scale(f.scale * pulseScale, f.scale * pulseScale);
+      ctx.shadowBlur = 15;
+      ctx.shadowColor = '#ffd700';
+
+      ctx.drawImage(flowerBuffer, -25, -25);
+      ctx.restore();
+    });
+
+    if (p < 1) {
+      requestAnimationFrame(pulseLoop);
+    } else {
+      initFallingRainInteractive();
+    }
+  }
+
+  requestAnimationFrame(pulseLoop);
+}
+
+function initFallingRainInteractive() {
+  for (let i = 0; i < 30; i++) {
+    fallingFlowers.push({
+      x: Math.random() * W,
+      y: Math.random() * -500,
+      baseVy: Math.random() * 1.2 + 0.8,
+      vx: 0,
+      vy: Math.random() * 1.2 + 0.8,
+      scale: Math.random() * 0.35 + 0.35,
+      rotation: Math.random() * Math.PI * 2,
+      rotSpeed: (Math.random() - 0.5) * 0.02
+    });
+  }
+
+  function fallingLoop() {
+    ctx.clearRect(0, 0, W, H);
+
+    const treeX = W * 0.72;
+    const treeY = H * 0.85;
+    const treeHeight = H * 0.28;
+
+    ctx.beginPath();
+    ctx.moveTo(W * 0.08, treeY);
+    ctx.lineTo(W * 0.92, treeY);
+    ctx.strokeStyle = currentTheme === 'dark' ? 'rgba(255, 215, 0, 0.25)' : 'rgba(212, 160, 23, 0.4)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(treeX, treeY);
+    ctx.quadraticCurveTo(treeX - 15, treeY - treeHeight / 2, treeX, treeY - treeHeight);
+    ctx.strokeStyle = '#1b5e3a';
+    ctx.lineWidth = 12;
+    ctx.stroke();
+
+    [-0.45, 0.45, -0.7, 0.7, 0].forEach(ang => {
+      ctx.beginPath();
+      ctx.moveTo(treeX, treeY - treeHeight);
+      ctx.lineTo(treeX + Math.cos(-Math.PI / 2 + ang) * 75, (treeY - treeHeight) + Math.sin(-Math.PI / 2 + ang) * 75);
+      ctx.strokeStyle = '#1b5e3a';
+      ctx.lineWidth = 5;
+      ctx.stroke();
+    });
+    ctx.restore();
+
+    if (Math.random() < 0.035) {
+      let activeFlowers = flowers.filter(f => f.activeInTree);
+      if (activeFlowers.length > 0) {
+        let chosen = activeFlowers[Math.floor(Math.random() * activeFlowers.length)];
+        chosen.activeInTree = false;
+
+        fallingFlowers.push({
+          x: chosen.x,
+          y: chosen.y,
+          baseVy: Math.random() * 1.2 + 0.8,
+          vx: (Math.random() - 0.5) * 0.8,
+          vy: Math.random() * 1.0 + 0.5,
+          scale: chosen.scale,
+          rotation: Math.random() * Math.PI * 2,
+          rotSpeed: (Math.random() - 0.5) * 0.02
+        });
+      }
+    }
+
+    flowers.forEach(f => {
+      if (f.activeInTree) {
+        ctx.save();
+        ctx.translate(f.x, f.y);
+        ctx.scale(f.scale, f.scale);
+        ctx.drawImage(flowerBuffer, -25, -25);
+        ctx.restore();
+      }
+    });
+
+    fallingFlowers.forEach(ff => {
+      let dx = ff.x - mouse.x;
+      let dy = ff.y - mouse.y;
+      let dist = Math.sqrt(dx * dx + dy * dy);
+
+      if (dist < 90) {
+        let force = (90 - dist) / 90;
+        let angle = Math.atan2(dy, dx);
+        ff.vx += Math.cos(angle) * force * 0.8;
+        ff.vy += Math.sin(angle) * force * 0.8;
+      }
+
+      ff.vx *= 0.92;
+      ff.vy = ff.vy * 0.92 + ff.baseVy * 0.08;
+
+      ff.x += ff.vx;
+      ff.y += ff.vy;
+      ff.rotation += ff.rotSpeed;
+
+      let inactiveFlowers = flowers.filter(f => !f.activeInTree);
+      for (let emptySpot of inactiveFlowers) {
+        let spotDx = ff.x - emptySpot.x;
+        let spotDy = ff.y - emptySpot.y;
+        let spotDist = Math.sqrt(spotDx * spotDx + spotDy * spotDy);
+
+        if (spotDist < 25) {
+          emptySpot.activeInTree = true;
+          ff.y = H + 200;
+          break;
+        }
+      }
+
+      if (ff.y > H + 50) {
+        ff.y = -50;
+        ff.x = Math.random() * W;
+        ff.vx = 0;
+        ff.vy = ff.baseVy;
+      }
+
+      ctx.save();
+      ctx.translate(ff.x, ff.y);
+      ctx.rotate(ff.rotation);
+      ctx.scale(ff.scale, ff.scale);
+      ctx.drawImage(flowerBuffer, -25, -25);
+      ctx.restore();
+    });
+
+    requestAnimationFrame(fallingLoop);
+  }
+
+  fallingLoop();
+}
+
+function typeWriter(lineIdx, charIdx) {
+  if (lineIdx < poemText.length) {
+    let currentLine = poemText[lineIdx];
+
+    if (charIdx === 0) {
+      let p = document.createElement('p');
+      p.id = `line-${lineIdx}`;
+      typedContent.appendChild(p);
+    }
+
+    let p = document.getElementById(`line-${lineIdx}`);
+    p.textContent += currentLine.charAt(charIdx);
+
+    if (charIdx < currentLine.length - 1) {
+      setTimeout(() => typeWriter(lineIdx, charIdx + 1), 38);
+    } else {
+      setTimeout(() => typeWriter(lineIdx + 1, 0), 400);
+    }
+  } else {
+    let sig = document.createElement('p');
+    sig.className = 'signature';
+    sig.textContent = '✦ Eres el sol que hace florecer cada uno de mis días. ¡Te amo! ✦';
+    typedContent.appendChild(sig);
+  }
+}
+</script>
+
+</body>
+</html>
