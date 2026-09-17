@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Día de las Flores Amarillas - Optimizado para Celulares</title>
+  <title>Día de las Flores Amarillas - Con Música & Modo Claro/Oscuro</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Plus+Jakarta+Sans:wght@300;400;600&display=swap');
 
@@ -19,30 +19,32 @@
       --bg-color: #050608;
       --bg-gradient-1: rgba(255, 183, 3, 0.12);
       --bg-gradient-2: rgba(212, 163, 89, 0.08);
-      --container-bg: rgba(18, 20, 29, 0.65);
+      --container-bg: rgba(18, 20, 29, 0.55);
       --container-border: rgba(255, 215, 0, 0.25);
-      --card-bg: rgba(15, 17, 26, 0.88);
+      --card-bg: rgba(15, 17, 26, 0.85);
       --card-border: rgba(255, 215, 0, 0.3);
       --text-main: #d1d5db;
       --text-title-grad-start: #fff;
-      --theme-btn-bg: rgba(255, 255, 255, 0.12);
+      --theme-btn-bg: rgba(255, 255, 255, 0.1);
       --theme-btn-border: rgba(255, 215, 0, 0.4);
       --theme-btn-text: #ffd700;
+      --ground-line: rgba(255, 215, 0, 0.25);
     }
 
     [data-theme="light"] {
       --bg-color: #f7f5ed;
       --bg-gradient-1: rgba(255, 200, 0, 0.25);
       --bg-gradient-2: rgba(255, 180, 50, 0.15);
-      --container-bg: rgba(255, 255, 255, 0.75);
+      --container-bg: rgba(255, 255, 255, 0.65);
       --container-border: rgba(212, 160, 23, 0.4);
-      --card-bg: rgba(255, 255, 255, 0.92);
+      --card-bg: rgba(255, 255, 255, 0.88);
       --card-border: rgba(212, 160, 23, 0.45);
       --text-main: #333333;
       --text-title-grad-start: #2c1d02;
       --theme-btn-bg: rgba(0, 0, 0, 0.05);
       --theme-btn-border: rgba(212, 160, 23, 0.5);
       --theme-btn-text: #8a5a00;
+      --ground-line: rgba(212, 160, 23, 0.4);
     }
 
     body {
@@ -61,39 +63,36 @@
       transition: background 0.5s ease, color 0.5s ease;
     }
 
-    #app-container {
-      position: relative;
-      width: 100vw;
-      height: 100vh;
+    html {
       height: -webkit-fill-available;
-      background: var(--container-bg);
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      overflow: hidden;
-      transition: background 0.5s ease;
     }
 
-    @media (min-width: 768px) {
-      #app-container {
-        width: 95vw;
-        max-width: 1200px;
-        height: 90vh;
-        max-height: 750px;
-        border: 1px solid var(--container-border);
-        border-radius: 24px;
-        box-shadow: 0 30px 100px rgba(0, 0, 0, 0.3);
-      }
+    #app-container {
+      position: relative;
+      width: 95vw;
+      max-width: 1200px;
+      height: 90vh;
+      max-height: 750px;
+      background: var(--container-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--container-border);
+      border-radius: 24px;
+      box-shadow: 0 30px 100px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+      transition: background 0.5s ease, border-color 0.5s ease;
+      will-change: transform;
     }
 
     /* Botón de Cambio de Tema */
     #theme-toggle {
       position: absolute;
-      top: 15px;
-      right: 15px;
+      top: 20px;
+      right: 20px;
       z-index: 30;
-      padding: 8px 14px;
+      padding: 10px 18px;
       font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 600;
       color: var(--theme-btn-text);
       background: var(--theme-btn-bg);
@@ -101,10 +100,16 @@
       border-radius: 30px;
       cursor: pointer;
       backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       transition: all 0.3s ease;
       display: flex;
       align-items: center;
       gap: 6px;
+    }
+
+    #theme-toggle:hover, #theme-toggle:active {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
     }
 
     /* Botón Inicial */
@@ -113,13 +118,11 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      padding: 14px 28px;
-      width: 80%;
-      max-width: 300px;
+      padding: 16px 40px;
       font-family: 'Cinzel', serif;
-      font-size: 13px;
+      font-size: 15px;
       font-weight: 800;
-      letter-spacing: 2px;
+      letter-spacing: 3px;
       color: #000;
       background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);
       border: none;
@@ -127,41 +130,36 @@
       cursor: pointer;
       z-index: 20;
       box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
-      text-align: center;
-      transition: all 0.4s ease;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      white-space: nowrap;
     }
 
-    /* Carta Adaptada para Pantallas Celulares */
+    #start-btn:hover, #start-btn:active {
+      transform: translate(-50%, -50%) scale(1.08);
+      box-shadow: 0 0 50px rgba(255, 215, 0, 0.8);
+    }
+
+    /* Carta Lateral */
     #card-panel {
       position: absolute;
-      left: 5%;
-      top: 55px;
-      width: 90%;
-      max-height: 38%;
+      left: 4%;
+      top: 8%;
+      width: 38%;
+      max-width: 420px;
+      max-height: 84%;
       z-index: 10;
-      padding: 18px;
+      padding: 28px;
       background: var(--card-bg);
       backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
       border: 1px solid var(--card-border);
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      border-radius: 20px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
       opacity: 0;
-      transform: translateY(15px);
-      transition: opacity 1s ease, transform 1s ease, background 0.5s ease;
+      transform: translateY(20px);
+      transition: opacity 1s ease, transform 1s ease, background 0.5s ease, border-color 0.5s ease;
       overflow-y: auto;
-      touch-action: pan-y;
-    }
-
-    @media (min-width: 768px) {
-      #card-panel {
-        left: 4%;
-        top: 8%;
-        width: 38%;
-        max-width: 420px;
-        max-height: 84%;
-        padding: 28px;
-        border-radius: 20px;
-      }
+      -webkit-overflow-scrolling: touch;
     }
 
     #card-panel.active {
@@ -171,34 +169,32 @@
 
     #card-panel h1 {
       font-family: 'Cinzel', serif;
-      font-size: clamp(14px, 4vw, 18px);
+      font-size: clamp(16px, 1.8vw, 20px);
       font-weight: 800;
       background: linear-gradient(135deg, var(--text-title-grad-start) 0%, #d4a017 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin-bottom: 12px;
+      margin-bottom: 20px;
       line-height: 1.3;
-      letter-spacing: 1px;
-      text-align: center;
+      letter-spacing: 1.5px;
     }
 
     #card-panel p {
-      font-size: clamp(11px, 3.2vw, 13px);
-      line-height: 1.6;
+      font-size: clamp(12px, 1.2vw, 14px);
+      line-height: 1.8;
       color: var(--text-main);
       font-weight: 400;
-      margin-bottom: 8px;
+      margin-bottom: 12px;
     }
 
     .signature {
       font-family: 'Cinzel', serif;
-      font-size: clamp(12px, 3.5vw, 14px) !important;
+      font-size: clamp(13px, 1.2vw, 15px) !important;
       color: #d4a017 !important;
-      margin-top: 12px;
-      padding-top: 8px;
+      margin-top: 20px;
+      padding-top: 12px;
       border-top: 1px solid var(--card-border);
       font-weight: 600;
-      text-align: center;
     }
 
     canvas {
@@ -212,12 +208,50 @@
 
     #bg-canvas { z-index: 1; }
     #stage { z-index: 2; }
+
+    /* --- RESPONSIVE / MÓVILES --- */
+    @media (max-width: 768px) {
+      #app-container {
+        width: 100vw;
+        height: 100vh;
+        height: -webkit-fill-available;
+        max-width: none;
+        max-height: none;
+        border-radius: 0;
+        border: none;
+      }
+
+      #theme-toggle {
+        top: 15px;
+        right: 15px;
+        padding: 8px 14px;
+        font-size: 11px;
+      }
+
+      #start-btn {
+        padding: 14px 28px;
+        font-size: 13px;
+        letter-spacing: 1.5px;
+      }
+
+      #card-panel {
+        left: 5%;
+        right: 5%;
+        top: auto;
+        bottom: 4%;
+        width: 90%;
+        max-width: none;
+        max-height: 38%;
+        padding: 18px;
+        border-radius: 16px;
+      }
+    }
   </style>
 </head>
 <body data-theme="dark">
 
 <div id="app-container">
-  <button id="theme-toggle" onclick="toggleTheme()">🌙 Oscuro</button>
+  <button id="theme-toggle" onclick="toggleTheme()">🌙 Modo Oscuro</button>
   <button id="start-btn" onclick="startExperience()">✦ TOCAR PARA DESCUBRIR ✦</button>
 
   <div id="card-panel">
@@ -247,11 +281,11 @@ function toggleTheme() {
   if (currentTheme === 'dark') {
     currentTheme = 'light';
     document.body.setAttribute('data-theme', 'light');
-    themeToggleBtn.innerHTML = '☀️ Claro';
+    themeToggleBtn.innerHTML = '☀️ Modo Claro';
   } else {
     currentTheme = 'dark';
     document.body.setAttribute('data-theme', 'dark');
-    themeToggleBtn.innerHTML = '🌙 Oscuro';
+    themeToggleBtn.innerHTML = '🌙 Modo Oscuro';
   }
 }
 
@@ -263,31 +297,42 @@ function resize() {
 resize();
 window.addEventListener('resize', resize);
 
-// Soporte para Mouse y Pantallas Táctiles (Celulares)
 let mouse = { x: -1000, y: -1000 };
 
-function updatePointerPos(clientX, clientY) {
+function updateCoords(clientX, clientY) {
   const rect = canvas.getBoundingClientRect();
   mouse.x = clientX - rect.left;
   mouse.y = clientY - rect.top;
 }
 
-canvas.addEventListener('mousemove', (e) => updatePointerPos(e.clientX, e.clientY));
+canvas.addEventListener('mousemove', (e) => {
+  updateCoords(e.clientX, e.clientY);
+});
+
+canvas.addEventListener('mouseleave', () => {
+  mouse.x = -1000;
+  mouse.y = -1000;
+});
+
+// Soporte para interacción Táctil en Móviles
 canvas.addEventListener('touchmove', (e) => {
   if (e.touches.length > 0) {
-    updatePointerPos(e.touches[0].clientX, e.touches[0].clientY);
+    updateCoords(e.touches[0].clientX, e.touches[0].clientY);
   }
 }, { passive: true });
 
-canvas.addEventListener('mouseleave', () => mouse = { x: -1000, y: -1000 });
-canvas.addEventListener('touchend', () => mouse = { x: -1000, y: -1000 });
+canvas.addEventListener('touchend', () => {
+  mouse.x = -1000;
+  mouse.y = -1000;
+});
 
-// --- MÚSICA DE FONDO (Web Audio API) ---
+// --- SISTEMA DE MÚSICA DE FONDO (Web Audio API) ---
 let audioCtx;
 function startBackgroundMusic() {
   try {
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     
+    // Melodía armónica relajante en A mayor / F# menor
     const notes = [
       { f: 440.00, d: 0.5 }, { f: 554.37, d: 0.5 }, { f: 659.25, d: 0.5 }, { f: 880.00, d: 1.0 },
       { f: 659.25, d: 0.5 }, { f: 554.37, d: 0.5 }, { f: 493.88, d: 0.5 }, { f: 739.99, d: 1.0 },
@@ -304,11 +349,12 @@ function startBackgroundMusic() {
       let osc = audioCtx.createOscillator();
       let gain = audioCtx.createGain();
 
-      osc.type = 'sine';
+      osc.type = 'sine'; // Tono suave de celesta/caja de música
       osc.frequency.setValueAtTime(note.f, audioCtx.currentTime);
 
+      // Ataque suave y caída armónica
       gain.gain.setValueAtTime(0.001, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.07, audioCtx.currentTime + 0.1);
+      gain.gain.exponentialRampToValueAtTime(0.08, audioCtx.currentTime + 0.1);
       gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + note.d + 0.4);
 
       osc.connect(gain);
@@ -323,11 +369,11 @@ function startBackgroundMusic() {
 
     playNextNote();
   } catch (e) {
-    console.log("Audio no soportado");
+    console.log("Audio API no soportado o bloqueado");
   }
 }
 
-// Pre-render de flor optimizada
+// Buffer de flor pre-renderizada
 const flowerBuffer = document.createElement('canvas');
 flowerBuffer.width = 50;
 flowerBuffer.height = 50;
@@ -375,6 +421,7 @@ let isStarted = false;
 let flowers = [];
 let fallingFlowers = [];
 
+// Avión y estela en rastro
 let plane = {
   x: 0, y: 0, vx: 0, vy: 0, angle: 0, active: false, distanceTraveled: 0, maxDistance: 0
 };
@@ -383,29 +430,37 @@ let textParticles = [];
 const messageText = "♥ TE AMO ♥";
 
 function spawnPlane() {
-  const sides = ['left', 'right', 'top', 'diag-tl', 'diag-tr'];
+  const sides = ['left', 'right', 'top', 'bottom', 'diag-tl', 'diag-tr', 'diag-bl', 'diag-br'];
   const type = sides[Math.floor(Math.random() * sides.length)];
-  const speed = 2.2 + Math.random() * 0.5;
+  const speed = 2.4 + Math.random() * 0.6;
 
   let startX, startY, endX, endY;
 
   switch (type) {
     case 'left':
-      startX = -50; startY = 40 + Math.random() * (H * 0.25);
-      endX = W + 50; endY = startY + (Math.random() - 0.5) * 60;
+      startX = -100; startY = 80 + Math.random() * (H * 0.35);
+      endX = W + 100; endY = startY + (Math.random() - 0.5) * 80;
       break;
     case 'right':
-      startX = W + 50; startY = 40 + Math.random() * (H * 0.25);
-      endX = -50; endY = startY + (Math.random() - 0.5) * 60;
+      startX = W + 100; startY = 80 + Math.random() * (H * 0.35);
+      endX = -100; endY = startY + (Math.random() - 0.5) * 80;
       break;
     case 'top':
-      startX = W * 0.2 + Math.random() * (W * 0.6); startY = -50;
-      endX = startX + (Math.random() - 0.5) * 150; endY = H + 50;
+      startX = W * 0.3 + Math.random() * (W * 0.4); startY = -100;
+      endX = startX + (Math.random() - 0.5) * 200; endY = H + 100;
+      break;
+    case 'bottom':
+      startX = W * 0.3 + Math.random() * (W * 0.4); startY = H + 100;
+      endX = startX + (Math.random() - 0.5) * 200; endY = -100;
       break;
     case 'diag-tl':
-      startX = -50; startY = -50; endX = W + 50; endY = H * 0.5; break;
+      startX = -100; startY = -100; endX = W + 100; endY = H * 0.6; break;
     case 'diag-tr':
-      startX = W + 50; startY = -50; endX = -50; endY = H * 0.5; break;
+      startX = W + 100; startY = -100; endX = -100; endY = H * 0.6; break;
+    case 'diag-bl':
+      startX = -100; startY = H + 100; endX = W + 100; endY = -100; break;
+    case 'diag-br':
+      startX = W + 100; startY = H + 100; endX = -100; endY = -100; break;
   }
 
   const dx = endX - startX;
@@ -437,9 +492,9 @@ function drawSkyAndPlane() {
 
       if (Math.random() < 0.7) {
         smokeTrail.push({
-          x: plane.x - Math.cos(plane.angle) * 15,
-          y: plane.y - Math.sin(plane.angle) * 15,
-          alpha: 1, size: Math.random() * 2.5 + 1.5
+          x: plane.x - Math.cos(plane.angle) * 20,
+          y: plane.y - Math.sin(plane.angle) * 20,
+          alpha: 1, size: Math.random() * 3 + 2
         });
       }
 
@@ -450,8 +505,8 @@ function drawSkyAndPlane() {
         if (!textParticles.some(p => p.index === charIndex && p.runId === plane.maxDistance)) {
           textParticles.push({
             char: messageText[charIndex],
-            x: plane.x - Math.cos(plane.angle) * 20,
-            y: plane.y - Math.sin(plane.angle) * 20,
+            x: plane.x - Math.cos(plane.angle) * 25,
+            y: plane.y - Math.sin(plane.angle) * 25,
             angle: plane.angle,
             alpha: 1, index: charIndex, runId: plane.maxDistance
           });
@@ -463,11 +518,13 @@ function drawSkyAndPlane() {
   // Render Humo
   bgCtx.save();
   smokeTrail.forEach((p, idx) => {
-    p.alpha -= 0.003;
+    p.alpha -= 0.0025;
     if (p.alpha > 0) {
       bgCtx.fillStyle = currentTheme === 'dark' 
         ? `rgba(255, 230, 150, ${p.alpha})` 
         : `rgba(212, 160, 23, ${p.alpha * 0.8})`;
+      bgCtx.shadowBlur = 8;
+      bgCtx.shadowColor = '#ffd700';
       bgCtx.beginPath();
       bgCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
       bgCtx.fill();
@@ -480,16 +537,16 @@ function drawSkyAndPlane() {
   // Render Letras
   bgCtx.save();
   textParticles.forEach((tp, idx) => {
-    tp.alpha -= 0.0018;
+    tp.alpha -= 0.0015;
     if (tp.alpha > 0) {
       bgCtx.save();
       bgCtx.translate(tp.x, tp.y);
       bgCtx.rotate(tp.angle > Math.PI / 2 || tp.angle < -Math.PI / 2 ? tp.angle + Math.PI : tp.angle);
-      bgCtx.font = "italic bold clamp(14px, 4vw, 20px) 'Cinzel', serif";
+      bgCtx.font = "italic bold clamp(16px, 2vw, 24px) 'Cinzel', serif";
       bgCtx.fillStyle = currentTheme === 'dark' 
         ? `rgba(255, 215, 0, ${tp.alpha})`
         : `rgba(180, 120, 0, ${tp.alpha})`;
-      bgCtx.shadowBlur = 8;
+      bgCtx.shadowBlur = 12;
       bgCtx.shadowColor = "#ffd700";
       bgCtx.textAlign = "center";
       bgCtx.textBaseline = "middle";
@@ -509,12 +566,12 @@ function drawSkyAndPlane() {
     bgCtx.fillStyle = currentTheme === 'dark' ? "#fff" : "#333";
     bgCtx.beginPath();
     bgCtx.moveTo(0, 0);
-    bgCtx.lineTo(-16, -5);
-    bgCtx.lineTo(-12, 0);
-    bgCtx.lineTo(-16, 5);
+    bgCtx.lineTo(-20, -6);
+    bgCtx.lineTo(-16, 0);
+    bgCtx.lineTo(-20, 6);
     bgCtx.closePath();
     bgCtx.fill();
-    bgCtx.fillRect(-8, -10, 4, 20);
+    bgCtx.fillRect(-10, -12, 5, 24);
     bgCtx.restore();
   }
 
@@ -526,6 +583,7 @@ function startExperience() {
   if (isStarted) return;
   isStarted = true;
 
+  // Iniciar la música al interactuar con el botón
   startBackgroundMusic();
 
   startBtn.style.opacity = '0';
@@ -540,15 +598,22 @@ function startExperience() {
   animateAllTogether();
 }
 
+function getTreeCenter() {
+  const isMobile = W <= 768;
+  return {
+    centerX: isMobile ? W * 0.5 : W * 0.72,
+    centerY: isMobile ? H * 0.28 : H * 0.35,
+    treeX: isMobile ? W * 0.5 : W * 0.72,
+    treeY: isMobile ? H * 0.60 : H * 0.85
+  };
+}
+
 function initHeartPoints() {
-  // Ajuste de posición del árbol para móviles
-  const isMobile = W < 768;
-  const centerX = isMobile ? W * 0.5 : W * 0.72;
-  const centerY = isMobile ? H * 0.68 : H * 0.35;
-  const scale = Math.min(W, H) * (isMobile ? 0.018 : 0.021);
+  const pos = getTreeCenter();
+  const scale = Math.min(W, H) * (W <= 768 ? 0.018 : 0.021);
 
   for (let r = 0.15; r <= 1.0; r += 0.075) {
-    let numPoints = Math.floor(40 * r);
+    let numPoints = Math.floor(45 * r);
     for (let i = 0; i < numPoints; i++) {
       let t = (i / numPoints) * Math.PI * 2;
 
@@ -556,9 +621,9 @@ function initHeartPoints() {
       let y = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
 
       flowers.push({
-        x: centerX + (x * scale * r),
-        y: centerY + (y * scale * r),
-        scale: Math.random() * 0.2 + 0.4,
+        x: pos.centerX + (x * scale * r),
+        y: pos.centerY + (y * scale * r),
+        scale: Math.random() * 0.25 + 0.5,
         delay: 2000 + Math.random() * (TOTAL_ANIMATION_TIME - 3000),
         currentScale: 0,
         activeInTree: true
@@ -576,15 +641,15 @@ function animateAllTogether() {
 
     ctx.clearRect(0, 0, W, H);
 
-    const isMobile = W < 768;
-    const treeX = isMobile ? W * 0.5 : W * 0.72;
-    const treeY = isMobile ? H * 0.95 : H * 0.85;
-    const treeHeight = isMobile ? H * 0.22 : H * 0.28;
+    const pos = getTreeCenter();
+    const treeX = pos.treeX;
+    const treeY = pos.treeY;
+    const treeHeight = H * (W <= 768 ? 0.22 : 0.28);
 
     // Suelo
     ctx.beginPath();
-    ctx.moveTo(W * 0.05, treeY);
-    ctx.lineTo(W * 0.95, treeY);
+    ctx.moveTo(W * 0.08, treeY);
+    ctx.lineTo(W * 0.92, treeY);
     ctx.strokeStyle = currentTheme === 'dark' ? 'rgba(255, 215, 0, 0.25)' : 'rgba(212, 160, 23, 0.4)';
     ctx.lineWidth = 2;
     ctx.stroke();
@@ -597,23 +662,22 @@ function animateAllTogether() {
     ctx.save();
     ctx.beginPath();
     ctx.moveTo(treeX, treeY);
-    ctx.quadraticCurveTo(treeX - 10, treeY - curH / 2, treeX, endY);
+    ctx.quadraticCurveTo(treeX - 15, treeY - curH / 2, treeX, endY);
     ctx.strokeStyle = '#1b5e3a';
-    ctx.lineWidth = isMobile ? 8 : 12;
+    ctx.lineWidth = W <= 768 ? 8 : 12;
     ctx.lineCap = 'round';
     ctx.stroke();
 
     // Ramas
     if (trunkProgress > 0.6) {
       let bProgress = (trunkProgress - 0.6) / 0.4;
-      let branchLen = isMobile ? 50 : 75;
+      let branchLength = (W <= 768 ? 50 : 75) * bProgress;
       [-0.45, 0.45, -0.7, 0.7, 0].forEach(ang => {
-        let len = branchLen * bProgress;
         ctx.beginPath();
         ctx.moveTo(treeX, endY);
-        ctx.lineTo(treeX + Math.cos(-Math.PI / 2 + ang) * len, endY + Math.sin(-Math.PI / 2 + ang) * len);
+        ctx.lineTo(treeX + Math.cos(-Math.PI / 2 + ang) * branchLength, endY + Math.sin(-Math.PI / 2 + ang) * branchLength);
         ctx.strokeStyle = '#1b5e3a';
-        ctx.lineWidth = isMobile ? 3 : 5;
+        ctx.lineWidth = W <= 768 ? 3 : 5;
         ctx.stroke();
       });
     }
@@ -656,16 +720,16 @@ function triggerTreePulseAnimation() {
 
     ctx.clearRect(0, 0, W, H);
 
-    const isMobile = W < 768;
-    const treeX = isMobile ? W * 0.5 : W * 0.72;
-    const treeY = isMobile ? H * 0.95 : H * 0.85;
-    const treeHeight = isMobile ? H * 0.22 : H * 0.28;
+    const pos = getTreeCenter();
+    const treeX = pos.treeX;
+    const treeY = pos.treeY;
+    const treeHeight = H * (W <= 768 ? 0.22 : 0.28);
 
     let pulseScale = 1 + Math.sin(p * Math.PI * 3) * 0.04;
 
     ctx.beginPath();
-    ctx.moveTo(W * 0.05, treeY);
-    ctx.lineTo(W * 0.95, treeY);
+    ctx.moveTo(W * 0.08, treeY);
+    ctx.lineTo(W * 0.92, treeY);
     ctx.strokeStyle = currentTheme === 'dark' ? 'rgba(255, 215, 0, 0.3)' : 'rgba(212, 160, 23, 0.4)';
     ctx.lineWidth = 2;
     ctx.stroke();
@@ -673,24 +737,24 @@ function triggerTreePulseAnimation() {
     ctx.save();
     ctx.beginPath();
     ctx.moveTo(treeX, treeY);
-    ctx.quadraticCurveTo(treeX - 10, treeY - treeHeight / 2, treeX, treeY - treeHeight);
+    ctx.quadraticCurveTo(treeX - 15, treeY - treeHeight / 2, treeX, treeY - treeHeight);
     ctx.strokeStyle = '#1b5e3a';
-    ctx.lineWidth = isMobile ? 8 : 12;
+    ctx.lineWidth = W <= 768 ? 8 : 12;
     ctx.stroke();
 
-    let branchLen = isMobile ? 50 : 75;
+    let branchLength = W <= 768 ? 50 : 75;
     [-0.45, 0.45, -0.7, 0.7, 0].forEach(ang => {
       ctx.beginPath();
       ctx.moveTo(treeX, treeY - treeHeight);
-      ctx.lineTo(treeX + Math.cos(-Math.PI / 2 + ang) * branchLen, (treeY - treeHeight) + Math.sin(-Math.PI / 2 + ang) * branchLen);
+      ctx.lineTo(treeX + Math.cos(-Math.PI / 2 + ang) * branchLength, (treeY - treeHeight) + Math.sin(-Math.PI / 2 + ang) * branchLength);
       ctx.strokeStyle = '#1b5e3a';
-      ctx.lineWidth = isMobile ? 3 : 5;
+      ctx.lineWidth = W <= 768 ? 3 : 5;
       ctx.stroke();
     });
     ctx.restore();
 
-    const centerX = isMobile ? W * 0.5 : W * 0.72;
-    const centerY = isMobile ? H * 0.68 : H * 0.35;
+    const centerX = pos.centerX;
+    const centerY = pos.centerY;
 
     flowers.forEach(f => {
       ctx.save();
@@ -701,7 +765,7 @@ function triggerTreePulseAnimation() {
 
       ctx.translate(px, py);
       ctx.scale(f.scale * pulseScale, f.scale * pulseScale);
-      ctx.shadowBlur = 10;
+      ctx.shadowBlur = 15;
       ctx.shadowColor = '#ffd700';
 
       ctx.drawImage(flowerBuffer, -25, -25);
@@ -719,17 +783,14 @@ function triggerTreePulseAnimation() {
 }
 
 function initFallingRainInteractive() {
-  const isMobile = W < 768;
-  const numFalling = isMobile ? 20 : 30;
-
-  for (let i = 0; i < numFalling; i++) {
+  for (let i = 0; i < 30; i++) {
     fallingFlowers.push({
       x: Math.random() * W,
       y: Math.random() * -500,
       baseVy: Math.random() * 1.2 + 0.8,
       vx: 0,
       vy: Math.random() * 1.2 + 0.8,
-      scale: Math.random() * 0.3 + 0.3,
+      scale: Math.random() * 0.35 + 0.35,
       rotation: Math.random() * Math.PI * 2,
       rotSpeed: (Math.random() - 0.5) * 0.02
     });
@@ -738,13 +799,14 @@ function initFallingRainInteractive() {
   function fallingLoop() {
     ctx.clearRect(0, 0, W, H);
 
-    const treeX = isMobile ? W * 0.5 : W * 0.72;
-    const treeY = isMobile ? H * 0.95 : H * 0.85;
-    const treeHeight = isMobile ? H * 0.22 : H * 0.28;
+    const pos = getTreeCenter();
+    const treeX = pos.treeX;
+    const treeY = pos.treeY;
+    const treeHeight = H * (W <= 768 ? 0.22 : 0.28);
 
     ctx.beginPath();
-    ctx.moveTo(W * 0.05, treeY);
-    ctx.lineTo(W * 0.95, treeY);
+    ctx.moveTo(W * 0.08, treeY);
+    ctx.lineTo(W * 0.92, treeY);
     ctx.strokeStyle = currentTheme === 'dark' ? 'rgba(255, 215, 0, 0.25)' : 'rgba(212, 160, 23, 0.4)';
     ctx.lineWidth = 2;
     ctx.stroke();
@@ -752,5 +814,130 @@ function initFallingRainInteractive() {
     ctx.save();
     ctx.beginPath();
     ctx.moveTo(treeX, treeY);
-    ctx.quadraticCurveTo(treeX - 10, treeY - treeHeight / 2, treeX, treeY - treeHeight);
+    ctx.quadraticCurveTo(treeX - 15, treeY - treeHeight / 2, treeX, treeY - treeHeight);
     ctx.strokeStyle = '#1b5e3a';
+    ctx.lineWidth = W <= 768 ? 8 : 12;
+    ctx.stroke();
+
+    let branchLength = W <= 768 ? 50 : 75;
+    [-0.45, 0.45, -0.7, 0.7, 0].forEach(ang => {
+      ctx.beginPath();
+      ctx.moveTo(treeX, treeY - treeHeight);
+      ctx.lineTo(treeX + Math.cos(-Math.PI / 2 + ang) * branchLength, (treeY - treeHeight) + Math.sin(-Math.PI / 2 + ang) * branchLength);
+      ctx.strokeStyle = '#1b5e3a';
+      ctx.lineWidth = W <= 768 ? 3 : 5;
+      ctx.stroke();
+    });
+    ctx.restore();
+
+    if (Math.random() < 0.035) {
+      let activeFlowers = flowers.filter(f => f.activeInTree);
+      if (activeFlowers.length > 0) {
+        let chosen = activeFlowers[Math.floor(Math.random() * activeFlowers.length)];
+        chosen.activeInTree = false;
+
+        fallingFlowers.push({
+          x: chosen.x,
+          y: chosen.y,
+          baseVy: Math.random() * 1.2 + 0.8,
+          vx: (Math.random() - 0.5) * 0.8,
+          vy: Math.random() * 1.0 + 0.5,
+          scale: chosen.scale,
+          rotation: Math.random() * Math.PI * 2,
+          rotSpeed: (Math.random() - 0.5) * 0.02
+        });
+      }
+    }
+
+    flowers.forEach(f => {
+      if (f.activeInTree) {
+        ctx.save();
+        ctx.translate(f.x, f.y);
+        ctx.scale(f.scale, f.scale);
+        ctx.drawImage(flowerBuffer, -25, -25);
+        ctx.restore();
+      }
+    });
+
+    fallingFlowers.forEach(ff => {
+      let dx = ff.x - mouse.x;
+      let dy = ff.y - mouse.y;
+      let dist = Math.sqrt(dx * dx + dy * dy);
+
+      if (dist < 90) {
+        let force = (90 - dist) / 90;
+        let angle = Math.atan2(dy, dx);
+        ff.vx += Math.cos(angle) * force * 0.8;
+        ff.vy += Math.sin(angle) * force * 0.8;
+      }
+
+      ff.vx *= 0.92;
+      ff.vy = ff.vy * 0.92 + ff.baseVy * 0.08;
+
+      ff.x += ff.vx;
+      ff.y += ff.vy;
+      ff.rotation += ff.rotSpeed;
+
+      let inactiveFlowers = flowers.filter(f => !f.activeInTree);
+      for (let emptySpot of inactiveFlowers) {
+        let spotDx = ff.x - emptySpot.x;
+        let spotDy = ff.y - emptySpot.y;
+        let spotDist = Math.sqrt(spotDx * spotDx + spotDy * spotDy);
+
+        if (spotDist < 25) {
+          emptySpot.activeInTree = true;
+          ff.y = H + 200;
+          break;
+        }
+      }
+
+      if (ff.y > H + 50) {
+        ff.y = -50;
+        ff.x = Math.random() * W;
+        ff.vx = 0;
+        ff.vy = ff.baseVy;
+      }
+
+      ctx.save();
+      ctx.translate(ff.x, ff.y);
+      ctx.rotate(ff.rotation);
+      ctx.scale(ff.scale, ff.scale);
+      ctx.drawImage(flowerBuffer, -25, -25);
+      ctx.restore();
+    });
+
+    requestAnimationFrame(fallingLoop);
+  }
+
+  fallingLoop();
+}
+
+function typeWriter(lineIdx, charIdx) {
+  if (lineIdx < poemText.length) {
+    let currentLine = poemText[lineIdx];
+
+    if (charIdx === 0) {
+      let p = document.createElement('p');
+      p.id = `line-${lineIdx}`;
+      typedContent.appendChild(p);
+    }
+
+    let p = document.getElementById(`line-${lineIdx}`);
+    p.textContent += currentLine.charAt(charIdx);
+
+    if (charIdx < currentLine.length - 1) {
+      setTimeout(() => typeWriter(lineIdx, charIdx + 1), 38);
+    } else {
+      setTimeout(() => typeWriter(lineIdx + 1, 0), 400);
+    }
+  } else {
+    let sig = document.createElement('p');
+    sig.className = 'signature';
+    sig.textContent = '✦ Eres el sol que hace florecer cada uno de mis días. ¡Te amo! ✦';
+    typedContent.appendChild(sig);
+  }
+}
+</script>
+
+</body>
+</html>
